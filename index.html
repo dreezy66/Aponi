@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Aponi Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>🦋 Aponi Dashboard</h1>
+    <div id="status" class="status">Checking system status...</div>
+  </header>
+
+  <main>
+    <section id="kpis" class="card">
+      <h2>System KPIs</h2>
+      <div id="kpi-container"></div>
+    </section>
+
+    <section id="agents" class="card">
+      <h2>Active Agents</h2>
+      <ul id="agent-list"></ul>
+      <button id="refresh-agents">Refresh Agents</button>
+    </section>
+
+    <section id="stream" class="card">
+      <h2>Live Stream</h2>
+      <pre id="stream-log"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>Powered by ADAAD · Aponi Open Source Dashboard</p>
+  </footer>
+
+  <script src="static/js/api.js"></script>
+  <script src="static/js/dashboard.js"></script>
+  <script src="static/js/stream.js"></script>
+</body>
+</html>
