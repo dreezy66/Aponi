@@ -1,7 +1,13 @@
-// Base URL for Render backend
-const APONI_API_BASE = "https://aponi-dashboard.onrender.com";
+// Base URL for Render backend; allows override via global for local dev
+const DEFAULT_APONI_API_BASE = "https://aponi-dashboard.onrender.com";
+const APONI_API_BASE =
+  (typeof window !== "undefined" && window.APONI_API_BASE) || DEFAULT_APONI_API_BASE;
 
-// Helper function for GET requests
+/**
+ * Helper function for GET requests with consistent error handling.
+ * @param {string} path
+ * @returns {Promise<any|null>}
+ */
 async function apiGet(path) {
   try {
     const res = await fetch(`${APONI_API_BASE}${path}`);
