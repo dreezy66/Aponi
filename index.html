@@ -10,6 +10,7 @@
   <header>
     <h1>🦋 Aponi Dashboard</h1>
     <div id="status" class="status">Checking system status...</div>
+    <div id="banner" class="banner" hidden></div>
   </header>
 
   <main>
@@ -24,6 +25,13 @@
       <button id="refresh-agents">Refresh Agents</button>
     </section>
 
+    <section id="tree" class="card">
+      <h2>Explorer</h2>
+      <input id="tree-filter" type="search" placeholder="Filter files" aria-label="Filter files" />
+      <div id="mode-badge" class="badge">Mode: default</div>
+      <div id="tree-root"></div>
+    </section>
+
     <section id="stream" class="card">
       <h2>Live Stream</h2>
       <pre id="stream-log"></pre>
@@ -35,7 +43,8 @@
   </footer>
 
   <script src="static/js/api.js"></script>
-  <script src="static/js/dashboard.js"></script>
-  <script src="static/js/stream.js"></script>
+  <script src="static/js/aponi_dashboard_tree.js"></script>
+  <script src="static/js/aponi_dashboard_events.js"></script>
+  <script src="static/js/aponi_dashboard_core.js"></script>
 </body>
 </html>
