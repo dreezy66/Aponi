@@ -12,3 +12,11 @@ async function apiGet(path) {
     return null;
   }
 }
+
+// Export for testing environments
+if (typeof module !== "undefined") {
+  module.exports = {
+    apiGet,
+    APONI_API_BASE,
+  };
+}

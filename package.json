@@ -1,0 +1,22 @@
+{
+  "name": "aponi",
+  "version": "1.0.0",
+  "description": "Open-source UI for the ADAAD Orchestrator.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "jest": "^30.2.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/__tests__"
+    ]
+  }
+}
