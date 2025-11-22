@@ -6,6 +6,8 @@ const DASHBOARD_IDS = {
   streamLog: "stream-log",
   banner: "banner",
   treeFilter: "tree-filter",
+  changeLogList: "change-log-list",
+  suggestionsList: "suggestions-list",
 };
 
 function getEl(id) {
@@ -26,6 +28,49 @@ function clearBanner() {
     banner.textContent = "";
     banner.hidden = true;
   }
+}
+
+function formatListItem(item) {
+  if (typeof item === "string") return item;
+  if (!item || typeof item !== "object") return "";
+
+  const parts = [item.title || item.name, item.description || item.message];
+
+  if (item.timestamp || item.time) {
+    parts.push(`(${item.timestamp || item.time})`);
+  }
+
+  return parts
+    .filter(Boolean)
+    .join(" — ")
+    .trim();
+}
+
+function renderListWithFallback(element, items, emptyMessage) {
+  if (!element) return;
+
+  const formattedItems = Array.isArray(items)
+    ? items
+        .map(formatListItem)
+        .map(text => text && text.trim())
+        .filter(Boolean)
+        .slice(0, 50)
+    : [];
+
+  element.innerHTML = "";
+
+  if (!formattedItems.length) {
+    const empty = document.createElement("li");
+    empty.textContent = emptyMessage;
+    element.appendChild(empty);
+    return;
+  }
+
+  formattedItems.forEach(text => {
+    const li = document.createElement("li");
+    li.textContent = text;
+    element.appendChild(li);
+  });
 }
 
 async function loadStatus() {
@@ -68,6 +113,30 @@ async function loadAgents() {
   }
 }
 
+async function loadChangeLog() {
+  const changeLogEl = getEl(DASHBOARD_IDS.changeLogList);
+  if (!changeLogEl) return;
+
+  const changeLog = await apiGet("/api/changes");
+  if (!changeLog) {
+    createBanner("Could not load recent changes");
+  }
+
+  renderListWithFallback(changeLogEl, changeLog, "No recent changes logged");
+}
+
+async function loadSuggestions() {
+  const suggestionsEl = getEl(DASHBOARD_IDS.suggestionsList);
+  if (!suggestionsEl) return;
+
+  const suggestions = await apiGet("/api/suggestions");
+  if (!suggestions) {
+    createBanner("Could not load suggestions");
+  }
+
+  renderListWithFallback(suggestionsEl, suggestions, "No suggestions available");
+}
+
 function initStream() {
   const streamLog = getEl(DASHBOARD_IDS.streamLog);
   if (!streamLog) return;
@@ -89,7 +158,13 @@ const AponiDashboard = (() => {
   return {
     async init(treeData) {
       clearBanner();
-      await Promise.all([loadStatus(), loadKpis(), loadAgents()]);
+      await Promise.all([
+        loadStatus(),
+        loadKpis(),
+        loadAgents(),
+        loadChangeLog(),
+        loadSuggestions(),
+      ]);
       initStream();
       initTreeFilter();
       if (treeData) {

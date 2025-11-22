@@ -42,6 +42,16 @@ main {
   box-shadow: 0 0 10px #222;
 }
 
+.stacked-list {
+  list-style: disc;
+  padding-left: 18px;
+  margin: 0;
+}
+
+.stacked-list li + li {
+  margin-top: 6px;
+}
+
 button {
   margin-top: 10px;
   background: #222;
