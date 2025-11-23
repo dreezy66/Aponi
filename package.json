@@ -1,22 +1,18 @@
 {
-  "name": "aponi",
+  "name": "aponi-oss",
   "version": "1.0.0",
-  "description": "Open-source UI for the ADAAD Orchestrator.",
-  "main": "index.js",
+  "description": "Aponi mock-first dashboard (open source)",
+  "private": true,
   "scripts": {
+    "lint": "eslint .",
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
-    "jest": "^30.2.0"
+    "eslint": "^8.57.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^30.2.0"
   },
   "jest": {
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/__tests__"
-    ]
+    "testEnvironment": "jsdom"
   }
 }

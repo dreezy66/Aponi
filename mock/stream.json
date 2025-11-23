@@ -1,0 +1,6 @@
+{
+  "events": [
+    { "type": "info", "message": "Mock stream active" },
+    { "type": "metric", "message": "Heartbeat received" }
+  ]
+}

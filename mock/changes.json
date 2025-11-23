@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "title": "Updated adapter contract",
+      "timestamp": "2024-05-12T09:30Z",
+      "summary": "Aligned public surface with private ADAAD adapter.",
+      "owner": "Aponi Team"
+    },
+    {
+      "title": "Improved mock telemetry",
+      "timestamp": "2024-05-11T17:10Z",
+      "summary": "Added latency and escalation fixtures for demo sessions.",
+      "owner": "Aponi Team"
+    }
+  ]
+}

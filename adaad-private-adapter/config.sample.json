@@ -1,0 +1,5 @@
+{
+  "apiBase": "http://127.0.0.1:8001",
+  "token": "replace-with-local-token",
+  "notes": "Copy to config.local.json and keep outside the public repository."
+}
