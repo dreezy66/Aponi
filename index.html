@@ -28,7 +28,7 @@
     <section id="tree" class="card">
       <h2>Explorer</h2>
       <input id="tree-filter" type="search" placeholder="Filter files" aria-label="Filter files" />
-      <div id="mode-badge" class="badge">Mode: default</div>
+      <div id="mode-badge" class="badge">Mode: mock</div>
       <div id="tree-root"></div>
     </section>
 
@@ -49,9 +49,16 @@
   </main>
 
   <footer>
-    <p>Powered by ADAAD · Aponi Open Source Dashboard</p>
+    <p>Powered by the Aponi Open Source Dashboard</p>
   </footer>
 
+  <script>
+    // Default to mock mode for safe, offline previews.
+    // To point at a live backend, set:
+    //   window.APONI_MODE = "live";
+    //   window.APONI_API_BASE = "https://your-endpoint.example.com";
+    window.APONI_MODE = window.APONI_MODE || "mock";
+  </script>
   <script src="static/js/api.js"></script>
   <script src="static/js/aponi_dashboard_tree.js"></script>
   <script src="static/js/aponi_dashboard_events.js"></script>

@@ -75,20 +75,22 @@ function renderListWithFallback(element, items, emptyMessage) {
 
 async function loadStatus() {
   const statusEl = getEl(DASHBOARD_IDS.status);
-  const status = await apiGet("/api/status");
-  if (status && status.ok) {
-    statusEl.textContent = `✅ Online (${status.time})`;
+  const status = await AponiAPI.apiGet("/api/status");
+  if (status && (status.ok || status.status === "ok")) {
+    const reportedTime = status.time || status.timestamp || "online";
+    statusEl.textContent = `✅ Online (${reportedTime})`;
     statusEl.style.color = "";
-  } else {
-    statusEl.textContent = "⚠️ Offline";
-    statusEl.style.color = "#f00";
-    createBanner("System status unavailable");
+    return;
   }
+
+  statusEl.textContent = "⚠️ Offline";
+  statusEl.style.color = "#f00";
+  createBanner("System status unavailable");
 }
 
 async function loadKpis() {
   const kpiContainer = getEl(DASHBOARD_IDS.kpiContainer);
-  const kpis = await apiGet("/api/kpis");
+  const kpis = await AponiAPI.apiGet("/api/kpis");
   if (kpis) {
     kpiContainer.innerHTML = Object.entries(kpis)
       .map(([key, val]) => `<p><strong>${key}:</strong> ${val}</p>`)
@@ -100,7 +102,7 @@ async function loadKpis() {
 
 async function loadAgents() {
   const agentList = getEl(DASHBOARD_IDS.agentList);
-  const agents = await apiGet("/api/agents");
+  const agents = await AponiAPI.apiGet("/api/agents");
   agentList.innerHTML = "";
   if (agents && agents.length > 0) {
     agents.forEach(agent => {
@@ -117,7 +119,7 @@ async function loadChangeLog() {
   const changeLogEl = getEl(DASHBOARD_IDS.changeLogList);
   if (!changeLogEl) return;
 
-  const changeLog = await apiGet("/api/changes");
+  const changeLog = await AponiAPI.apiGet("/api/changes");
   if (!changeLog) {
     createBanner("Could not load recent changes");
   }
@@ -129,12 +131,21 @@ async function loadSuggestions() {
   const suggestionsEl = getEl(DASHBOARD_IDS.suggestionsList);
   if (!suggestionsEl) return;
 
-  const suggestions = await apiGet("/api/suggestions");
+  const suggestions = await AponiAPI.apiGet("/api/suggestions");
   if (!suggestions) {
     createBanner("Could not load suggestions");
   }
 
   renderListWithFallback(suggestionsEl, suggestions, "No suggestions available");
+}
+
+async function loadTree() {
+  const tree = await AponiAPI.apiGet("/api/tree");
+  if (tree) {
+    AponiDashboardTree.init(tree);
+  } else {
+    createBanner("Could not load explorer tree");
+  }
 }
 
 function initStream() {
@@ -156,20 +167,19 @@ function initTreeFilter() {
 
 const AponiDashboard = (() => {
   return {
-    async init(treeData) {
+    async init() {
       clearBanner();
+      AponiDashboardTree.setMode(AponiAPI.getMode());
       await Promise.all([
         loadStatus(),
         loadKpis(),
         loadAgents(),
         loadChangeLog(),
         loadSuggestions(),
+        loadTree(),
       ]);
       initStream();
       initTreeFilter();
-      if (treeData) {
-        AponiDashboardTree.init(treeData);
-      }
       const refreshBtn = getEl(DASHBOARD_IDS.refreshButton);
       if (refreshBtn) {
         refreshBtn.addEventListener("click", loadAgents);

@@ -54,7 +54,8 @@ const AponiDashboardTree = (() => {
     setMode(mode) {
       const badge = document.getElementById(DASHBOARD_TREE_IDS.modeBadge);
       if (badge) {
-        badge.textContent = mode;
+        const label = mode ? `Mode: ${mode}` : "Mode: unknown";
+        badge.textContent = label;
       }
     },
   };

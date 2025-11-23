@@ -1,0 +1,7 @@
+{
+  "uptime": "99.99%",
+  "requests": 1428,
+  "latency_ms": 120,
+  "agents_active": 5,
+  "version": "oss-mock"
+}
