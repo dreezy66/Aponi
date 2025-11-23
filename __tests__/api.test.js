@@ -1,61 +1,47 @@
-const { apiGet, APONI_API_BASE } = require("../static/js/api");
+const { apiGet, apiPost } = require("../static/js/api");
 
-describe("apiGet", () => {
-  const originalConsoleError = console.error;
-
+describe("AponiAPI", () => {
   beforeEach(() => {
-    console.error = jest.fn();
+    global.APONI_MODE = "mock";
+    global.APONI_API_BASE = undefined;
     global.fetch = jest.fn();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-    console.error = originalConsoleError;
-    delete global.fetch;
-  });
-
-  it("returns parsed JSON when the response is ok", async () => {
-    const mockData = { status: "ok" };
-    global.fetch.mockResolvedValue({
+  it("uses mock files by default", async () => {
+    const mockResponse = {
       ok: true,
-      status: 200,
-      json: jest.fn().mockResolvedValue(mockData),
-    });
+      json: () => Promise.resolve({ ok: true }),
+    };
+    global.fetch.mockResolvedValue(mockResponse);
 
-    const result = await apiGet("/metrics");
+    await apiGet("status");
 
-    expect(global.fetch).toHaveBeenCalledWith(`${APONI_API_BASE}/metrics`);
-    expect(result).toEqual(mockData);
-    expect(console.error).not.toHaveBeenCalled();
+    expect(global.fetch).toHaveBeenCalledWith("./mock/status.json", { cache: "no-cache" });
   });
 
-  it("logs and returns null when the response is not ok", async () => {
-    global.fetch.mockResolvedValue({
-      ok: false,
-      status: 500,
-      json: jest.fn(),
-    });
+  it("builds live URLs when APONI_MODE is live", async () => {
+    global.APONI_MODE = "live";
+    global.APONI_API_BASE = "https://example.test";
+    const response = { ok: true, json: () => Promise.resolve({}) };
+    global.fetch.mockResolvedValue(response);
 
-    const result = await apiGet("/metrics");
+    await apiGet("/agents");
 
-    expect(result).toBeNull();
-    expect(console.error).toHaveBeenCalledWith(
-      "API GET failed:",
-      "/metrics",
-      expect.any(Error)
-    );
+    expect(global.fetch).toHaveBeenCalledWith("https://example.test/agents", { method: "GET" });
   });
 
-  it("logs and returns null when fetch throws an error", async () => {
-    global.fetch.mockRejectedValue(new Error("network error"));
+  it("posts JSON bodies in live mode", async () => {
+    global.APONI_MODE = "live";
+    global.APONI_API_BASE = "https://example.test";
+    const response = { ok: true, json: () => Promise.resolve({ created: true }) };
+    global.fetch.mockResolvedValue(response);
 
-    const result = await apiGet("/agents");
+    await apiPost("changes", { foo: "bar" });
 
-    expect(result).toBeNull();
-    expect(console.error).toHaveBeenCalledWith(
-      "API GET failed:",
-      "/agents",
-      expect.any(Error)
-    );
+    expect(global.fetch).toHaveBeenCalledWith("https://example.test/changes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ foo: "bar" }),
+    });
   });
 });

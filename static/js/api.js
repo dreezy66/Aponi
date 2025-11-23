@@ -1,28 +1,58 @@
-// Base URL for Render backend; allows override via global for local dev
-const DEFAULT_APONI_API_BASE = "https://aponi-dashboard.onrender.com";
-const APONI_API_BASE =
-  (typeof window !== "undefined" && window.APONI_API_BASE) || DEFAULT_APONI_API_BASE;
+(function (global) {
+  const DEFAULT_MODE = "mock";
 
-/**
- * Helper function for GET requests with consistent error handling.
- * @param {string} path
- * @returns {Promise<any|null>}
- */
-async function apiGet(path) {
-  try {
-    const res = await fetch(`${APONI_API_BASE}${path}`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  } catch (err) {
-    console.error("API GET failed:", path, err);
-    return null;
+  function getMode() {
+    const mode = (global.APONI_MODE || DEFAULT_MODE).toLowerCase();
+    return mode === "live" ? "live" : DEFAULT_MODE;
   }
-}
 
-// Export for testing environments
-if (typeof module !== "undefined") {
-  module.exports = {
-    apiGet,
-    APONI_API_BASE,
-  };
-}
+  function normalizePath(path) {
+    const normalized = (path || "").toString().replace(/^\/*/, "");
+    return normalized ? `/${normalized}` : "/";
+  }
+
+  function buildLiveUrl(path) {
+    const base = (global.APONI_API_BASE || "").replace(/\/$/, "");
+    return `${base}${normalizePath(path)}`;
+  }
+
+  function buildMockUrl(path) {
+    const normalized = normalizePath(path).replace(/^\//, "");
+    return `./mock/${normalized || "index"}.json`;
+  }
+
+  async function handleResponse(label, response) {
+    if (!response.ok) {
+      throw new Error(`${label} => ${response.status}`);
+    }
+    return response.json();
+  }
+
+  async function apiGet(path) {
+    if (getMode() === "mock") {
+      const mockUrl = buildMockUrl(path);
+      const response = await fetch(mockUrl, { cache: "no-cache" });
+      return handleResponse(`MOCK GET ${mockUrl}`, response);
+    }
+
+    const liveUrl = buildLiveUrl(path);
+    const response = await fetch(liveUrl, { method: "GET" });
+    return handleResponse(`GET ${liveUrl}`, response);
+  }
+
+  async function apiPost(path, body) {
+    const liveUrl = buildLiveUrl(path);
+    const response = await fetch(liveUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body || {}),
+    });
+    return handleResponse(`POST ${liveUrl}`, response);
+  }
+
+  global.AponiAPI = { apiGet, apiPost };
+
+  if (typeof module !== "undefined") {
+    module.exports = global.AponiAPI;
+  }
+})(typeof window !== "undefined" ? window : globalThis);

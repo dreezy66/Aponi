@@ -1,60 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Aponi Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="static/css/style.css">
-</head>
-<body>
-  <header>
-    <h1>🦋 Aponi Dashboard</h1>
-    <div id="status" class="status">Checking system status...</div>
-    <div id="banner" class="banner" hidden></div>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aponi Dashboard (OSS)</title>
+    <link rel="stylesheet" href="static/css/style.css" />
+    <script>
+      window.APONI_MODE = window.APONI_MODE || "mock";
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>Aponi Dashboard</h1>
+      <span id="mode-badge" class="badge">Mode</span>
+    </header>
 
-  <main>
-    <section id="kpis" class="card">
-      <h2>System KPIs</h2>
-      <div id="kpi-container"></div>
-    </section>
+    <main>
+      <section class="panel">
+        <h2>System Status</h2>
+        <div id="status-panel"></div>
+        <div id="error-panel"></div>
+      </section>
 
-    <section id="agents" class="card">
-      <h2>Active Agents</h2>
-      <ul id="agent-list"></ul>
-      <button id="refresh-agents">Refresh Agents</button>
-    </section>
+      <section class="panel">
+        <h2>Key Metrics</h2>
+        <div id="kpi-panel"></div>
+      </section>
 
-    <section id="tree" class="card">
-      <h2>Explorer</h2>
-      <input id="tree-filter" type="search" placeholder="Filter files" aria-label="Filter files" />
-      <div id="mode-badge" class="badge">Mode: default</div>
-      <div id="tree-root"></div>
-    </section>
+      <section class="panel">
+        <h2>Agents</h2>
+        <div id="agents-panel"></div>
+      </section>
 
-    <section id="stream" class="card">
-      <h2>Live Stream</h2>
-      <pre id="stream-log"></pre>
-    </section>
+      <section class="panel">
+        <h2>Suggestions</h2>
+        <div id="suggestions-panel"></div>
+      </section>
 
-    <section id="changes" class="card">
-      <h2>Recent Changes</h2>
-      <ul id="change-log-list" class="stacked-list"></ul>
-    </section>
+      <section class="panel">
+        <h2>Recent Changes</h2>
+        <div id="changes-panel"></div>
+      </section>
 
-    <section id="suggestions" class="card">
-      <h2>Suggestions</h2>
-      <ul id="suggestions-list" class="stacked-list"></ul>
-    </section>
-  </main>
+      <section class="panel tree-panel">
+        <h2>System Tree</h2>
+        <div id="tree-panel"></div>
+      </section>
+    </main>
 
-  <footer>
-    <p>Powered by ADAAD · Aponi Open Source Dashboard</p>
-  </footer>
-
-  <script src="static/js/api.js"></script>
-  <script src="static/js/aponi_dashboard_tree.js"></script>
-  <script src="static/js/aponi_dashboard_events.js"></script>
-  <script src="static/js/aponi_dashboard_core.js"></script>
-</body>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/aponi_dashboard_core.js"></script>
+    <script src="static/js/aponi_dashboard_tree.js"></script>
+  </body>
 </html>

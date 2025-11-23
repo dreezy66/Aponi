@@ -1,0 +1,8 @@
+{
+  "items": [
+    { "label": "Events processed", "value": "12,480", "trend": "up", "change": "+3% vs last hour" },
+    { "label": "Active agents", "value": "8", "trend": "flat", "change": "stable" },
+    { "label": "Escalations", "value": "2", "trend": "down", "change": "-1 open" },
+    { "label": "Latency", "value": "120 ms", "trend": "down", "change": "-12 ms" }
+  ]
+}

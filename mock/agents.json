@@ -1,0 +1,7 @@
+{
+  "items": [
+    { "name": "Collector", "summary": "Consumes telemetry from nodes.", "state": "active" },
+    { "name": "Summarizer", "summary": "Aggregates KPIs for the dashboard.", "state": "idle" },
+    { "name": "Watchdog", "summary": "Alerts on threshold breaches.", "state": "paused" }
+  ]
+}

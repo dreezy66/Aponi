@@ -1,63 +1,42 @@
-const DASHBOARD_TREE_IDS = {
-  treeRoot: "tree-root",
-  modeBadge: "mode-badge",
-};
+(function () {
+  const treeContainer = document.getElementById("tree-panel");
 
-const AponiDashboardTree = (() => {
-  let treeData = null;
-  let filterQuery = "";
+  function createNode(node) {
+    const wrapper = document.createElement("li");
+    const label = document.createElement("div");
+    label.className = "tree-label";
+    label.textContent = node.label || node.name || "Node";
+    wrapper.appendChild(label);
 
-  function getTreeRoot() {
-    return document.getElementById(DASHBOARD_TREE_IDS.treeRoot);
-  }
-
-  function renderNode(node, container) {
-    const li = document.createElement("li");
-    li.textContent = node.name;
     if (node.children && node.children.length) {
-      const details = document.createElement("details");
-      const summary = document.createElement("summary");
-      summary.textContent = node.name;
-      details.appendChild(summary);
-      const ul = document.createElement("ul");
-      node.children
-        .filter(child => !filterQuery || child.name.includes(filterQuery))
-        .slice(0, 200)
-        .forEach(child => renderNode(child, ul));
-      details.appendChild(ul);
-      li.innerHTML = "";
-      li.appendChild(details);
+      const list = document.createElement("ul");
+      node.children.forEach((child) => list.appendChild(createNode(child)));
+      wrapper.appendChild(list);
     }
-    container.appendChild(li);
+
+    return wrapper;
   }
 
-  function render(tree) {
-    const root = getTreeRoot();
-    if (!root) return;
-    root.innerHTML = "";
-    const ul = document.createElement("ul");
-    tree.slice(0, 500).forEach(node => renderNode(node, ul));
-    root.appendChild(ul);
+  function renderTree(tree) {
+    if (!treeContainer) return;
+    treeContainer.innerHTML = "";
+
+    const list = document.createElement("ul");
+    (tree.items || tree.children || tree || []).forEach((node) => {
+      list.appendChild(createNode(node));
+    });
+
+    treeContainer.appendChild(list);
   }
 
-  return {
-    init(initialTree) {
-      treeData = initialTree || [];
-      render(treeData);
-    },
-    filter(query) {
-      filterQuery = query || "";
-      if (treeData) {
-        render(treeData);
-      }
-    },
-    setMode(mode) {
-      const badge = document.getElementById(DASHBOARD_TREE_IDS.modeBadge);
-      if (badge) {
-        badge.textContent = mode;
-      }
-    },
-  };
+  async function loadTree() {
+    try {
+      const tree = await AponiAPI.apiGet("tree");
+      renderTree(tree);
+    } catch (err) {
+      console.error(err); // eslint-disable-line no-console
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadTree);
 })();
-
-window.AponiDashboardTree = AponiDashboardTree;

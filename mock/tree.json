@@ -1,0 +1,23 @@
+{
+  "items": [
+    {
+      "label": "Cluster",
+      "children": [
+        {
+          "label": "Edge",
+          "children": [
+            { "label": "Collector" },
+            { "label": "Forwarder" }
+          ]
+        },
+        {
+          "label": "Control",
+          "children": [
+            { "label": "Summarizer" },
+            { "label": "Watchdog" }
+          ]
+        }
+      ]
+    }
+  ]
+}

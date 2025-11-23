@@ -1,0 +1,7 @@
+{
+  "items": [
+    { "text": "Switch to live mode to see ADAAD telemetry." },
+    { "text": "Enable the Watchdog agent before enabling alerts." },
+    { "text": "Review escalation policy thresholds weekly." }
+  ]
+}
