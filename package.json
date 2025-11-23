@@ -1,7 +1,7 @@
 {
   "name": "aponi",
   "version": "1.0.0",
-  "description": "Open-source UI for the ADAAD Orchestrator.",
+  "description": "Open-source Aponi dashboard with mock and live modes.",
   "main": "index.js",
   "scripts": {
     "test": "jest"

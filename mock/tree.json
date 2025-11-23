@@ -1,0 +1,27 @@
+[
+  {
+    "name": "static",
+    "children": [
+      { "name": "css", "children": [ { "name": "style.css", "children": [] } ] },
+      { "name": "js", "children": [
+        { "name": "api.js", "children": [] },
+        { "name": "aponi_dashboard_core.js", "children": [] },
+        { "name": "aponi_dashboard_tree.js", "children": [] },
+        { "name": "aponi_dashboard_events.js", "children": [] }
+      ] }
+    ]
+  },
+  {
+    "name": "mock",
+    "children": [
+      { "name": "status.json", "children": [] },
+      { "name": "kpis.json", "children": [] },
+      { "name": "agents.json", "children": [] },
+      { "name": "changes.json", "children": [] },
+      { "name": "suggestions.json", "children": [] },
+      { "name": "tree.json", "children": [] },
+      { "name": "stream.json", "children": [] }
+    ]
+  },
+  { "name": "index.html", "children": [] }
+]

@@ -1,0 +1,6 @@
+[
+  { "name": "Explorer", "status": "idle" },
+  { "name": "Summarizer", "status": "running" },
+  { "name": "Planner", "status": "monitoring" },
+  { "name": "Reporter", "status": "ready" }
+]
