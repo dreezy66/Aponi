@@ -19,6 +19,18 @@ describe("AponiAPI", () => {
     expect(global.fetch).toHaveBeenCalledWith("./mock/status.json", { cache: "no-cache" });
   });
 
+  it("posts to mock files in mock mode", async () => {
+    const mockResponse = {
+      ok: true,
+      json: () => Promise.resolve({ saved: true }),
+    };
+    global.fetch.mockResolvedValue(mockResponse);
+
+    await apiPost("changes", { foo: "bar" });
+
+    expect(global.fetch).toHaveBeenCalledWith("./mock/changes.json", { cache: "no-cache" });
+  });
+
   it("builds live URLs when APONI_MODE is live", async () => {
     global.APONI_MODE = "live";
     global.APONI_API_BASE = "https://example.test";

@@ -41,6 +41,12 @@
   }
 
   async function apiPost(path, body) {
+    if (getMode() === "mock") {
+      const mockUrl = buildMockUrl(path);
+      const response = await fetch(mockUrl, { cache: "no-cache" });
+      return handleResponse(`MOCK POST ${mockUrl}`, response);
+    }
+
     const liveUrl = buildLiveUrl(path);
     const response = await fetch(liveUrl, {
       method: "POST",
