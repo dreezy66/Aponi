@@ -17,14 +17,21 @@
     return wrapper;
   }
 
+  function normalizeNodes(tree) {
+    const payload = tree?.items ?? tree;
+
+    if (!payload) return [];
+
+    return Array.isArray(payload) ? payload : [payload];
+  }
+
   function renderTree(tree) {
     if (!treeContainer) return;
     treeContainer.innerHTML = "";
 
     const list = document.createElement("ul");
-    (tree.items || tree.children || tree || []).forEach((node) => {
-      list.appendChild(createNode(node));
-    });
+    const nodes = normalizeNodes(tree);
+    nodes.forEach((node) => list.appendChild(createNode(node)));
 
     treeContainer.appendChild(list);
   }
