@@ -2,7 +2,7 @@ const path = require("path");
 
 describe("aponi_dashboard_tree", () => {
   const treeScriptPath = path.resolve(__dirname, "../static/js/aponi_dashboard_tree.js");
-  const flushPromises = () => new Promise((resolve) => setImmediate(resolve));
+  const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
   beforeEach(() => {
     jest.resetModules();

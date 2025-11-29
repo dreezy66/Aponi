@@ -31,6 +31,7 @@ In live mode the `AponiAPI` surface sends `GET` and `POST` requests to the provi
 npm install
 npm test
 npm run lint
+pip install -r requirements.txt
 python -m http.server 8000
 ```
 

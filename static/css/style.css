@@ -113,6 +113,22 @@ p {
   padding: 10px;
 }
 
+.agent-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-status-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  margin-right: 8px;
+  vertical-align: middle;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-block;
+}
+
 .state {
   display: inline-flex;
   margin-top: 6px;
