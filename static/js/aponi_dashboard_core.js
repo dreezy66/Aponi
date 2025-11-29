@@ -144,25 +144,56 @@
     errorContainer.classList.add("visible");
   }
 
-  async function loadData() {
-    try {
-      setModeBadge();
-      const [status, kpis, agents, changes, suggestions] = await Promise.all([
-        AponiAPI.apiGet("status"),
-        AponiAPI.apiGet("kpis"),
-        AponiAPI.apiGet("agents"),
-        AponiAPI.apiGet("changes"),
-        AponiAPI.apiGet("suggestions"),
-      ]);
+  function clearError() {
+    if (!errorContainer) return;
+    errorContainer.textContent = "";
+    errorContainer.classList.remove("visible");
+  }
 
-      renderStatus(status);
-      renderKpis(kpis.items || kpis);
-      renderAgents(agents.items || agents);
-      renderChanges(changes.items || changes);
-      renderSuggestions(suggestions.items || suggestions);
-    } catch (err) {
-      console.error(err); // eslint-disable-line no-console
-      showError("Unable to load dashboard data. Check console for details.");
+  async function loadData() {
+    setModeBadge();
+    clearError();
+
+    const sections = [
+      { key: "status", request: AponiAPI.apiGet("status"), render: renderStatus },
+      {
+        key: "kpis",
+        request: AponiAPI.apiGet("kpis"),
+        render: (data) => renderKpis(data.items || data),
+      },
+      {
+        key: "agents",
+        request: AponiAPI.apiGet("agents"),
+        render: (data) => renderAgents(data.items || data),
+      },
+      {
+        key: "changes",
+        request: AponiAPI.apiGet("changes"),
+        render: (data) => renderChanges(data.items || data),
+      },
+      {
+        key: "suggestions",
+        request: AponiAPI.apiGet("suggestions"),
+        render: (data) => renderSuggestions(data.items || data),
+      },
+    ];
+
+    const results = await Promise.allSettled(sections.map((section) => section.request));
+
+    const errors = [];
+
+    results.forEach((result, index) => {
+      const section = sections[index];
+      if (result.status === "fulfilled") {
+        section.render(result.value);
+      } else {
+        console.error(result.reason); // eslint-disable-line no-console
+        errors.push(`Failed to load ${section.key}.`);
+      }
+    });
+
+    if (errors.length > 0) {
+      showError(errors.join(" "));
     }
   }
 
