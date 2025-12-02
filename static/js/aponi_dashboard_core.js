@@ -17,6 +17,20 @@
     return document.createTextNode(value);
   }
 
+  function buildAgentIcon(agent) {
+    const iconPath =
+      agent?.icon ||
+      (agent?.path ? `/file-view/${agent.path}/state_icon.png` : null);
+
+    if (!iconPath) return null;
+
+    const img = document.createElement("img");
+    img.src = iconPath;
+    img.className = "agent-status-icon";
+    img.alt = `${agent.name || agent.id || "Agent"} status icon`;
+    return img;
+  }
+
   function renderStatus(status) {
     if (!statusContainer) return;
     statusContainer.innerHTML = "";
@@ -75,8 +89,17 @@
     (agents || []).forEach((agent) => {
       const item = document.createElement("li");
 
+      const heading = document.createElement("div");
+      heading.className = "agent-heading";
+
+      const icon = buildAgentIcon(agent);
+      if (icon) {
+        heading.appendChild(icon);
+      }
+
       const name = document.createElement("strong");
       name.appendChild(safeText(agent.name || "Agent"));
+      heading.appendChild(name);
 
       const summary = document.createElement("div");
       summary.className = "muted";
@@ -86,7 +109,7 @@
       state.className = `state ${agent.state || "idle"}`;
       state.appendChild(safeText(agent.state || "idle"));
 
-      item.appendChild(name);
+      item.appendChild(heading);
       item.appendChild(summary);
       item.appendChild(state);
       list.appendChild(item);
