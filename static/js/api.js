@@ -11,13 +11,36 @@
     return normalized ? `/${normalized}` : "/";
   }
 
+  function sanitizeMockPath(path) {
+    const parts = (path || "").toString().split("/").filter(Boolean);
+    const safeParts = [];
+
+    for (const part of parts) {
+      if (part === ".") {
+        continue;
+      }
+
+      if (part === "..") {
+        if (!safeParts.length) {
+          throw new Error(`Invalid mock path traversal: ${path}`);
+        }
+        safeParts.pop();
+        continue;
+      }
+
+      safeParts.push(part);
+    }
+
+    return safeParts.join("/");
+  }
+
   function buildLiveUrl(path) {
     const base = (global.APONI_API_BASE || "").replace(/\/$/, "");
     return `${base}${normalizePath(path)}`;
   }
 
   function buildMockUrl(path) {
-    const normalized = normalizePath(path).replace(/^\//, "");
+    const normalized = sanitizeMockPath(path);
     return `./mock/${normalized || "index"}.json`;
   }
 

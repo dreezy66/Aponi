@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>powered by ADAAD</title>
+  <style>
+    :root {
+        --edge-padding: 16px;
+        --muted: #94a3b8;
+        --good: #3fb950;
+    }
+
+    /* --- ADDED CSS for LVE Icon --- */
+    .agent-icon {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 6px;
+        vertical-align: middle;
+        line-height: 0;
+    }
+    .agent-icon img {
+        border-radius: 2px;
+        transition: opacity 0.3s;
+        background: #0f1724;
+    }
+    .agent-icon-legend {
+        color: var(--muted);
+        font-size: 0.8em;
+        margin-top: 10px;
+        padding: 0 var(--edge-padding);
+    }
+    /* ------------------------------- */
+  </style>
+  </head>
+<body>
+<div id="agent-list-container">
+    <div class="agent-icon-legend">
+        LVE Status: <span style="color:var(--good);">&#9632;</span> High CTS |
+        <span style="color:var(--muted); opacity:0.4;">&#9632;</span> Low/Quarantined
+    </div>
+    
+    <template id="agent-row-template">
+        <div class="agent-row" data-id="{{agent_id}}">
+            
+            <span class="agent-icon">
+                <img 
+                    src="/file-view/agents/{{agent_id}}/state_icon.png" 
+                    alt="LVE Status" 
+                    width="18" 
+                    height="18"
+                    title="CTS Indicator (Green=High, Dim=Low)"
+                    onerror="this.style.opacity='0.4'; this.title+=' | Icon not found. Run orchestrator.'"
+                />
+            </span>
+            <span class="agent-name">{{agent_name}}</span>
+            <span class="agent-status">{{status}}</span>
+            </div>
+    </template>
+</div>
+</body>
+</html>

@@ -56,4 +56,18 @@ describe("AponiAPI", () => {
       body: JSON.stringify({ foo: "bar" }),
     });
   });
+
+  it("normalizes mock paths to stay within the mock directory", async () => {
+    const mockResponse = { ok: true, json: () => Promise.resolve({}) };
+    global.fetch.mockResolvedValue(mockResponse);
+
+    await apiGet("reports/../status");
+
+    expect(global.fetch).toHaveBeenCalledWith("./mock/status.json", { cache: "no-cache" });
+  });
+
+  it("rejects attempts to traverse outside the mock directory", async () => {
+    await expect(apiGet("../config")).rejects.toThrow("Invalid mock path traversal");
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
 });
